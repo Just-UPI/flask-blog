@@ -1,4 +1,5 @@
 from datetime import date
+from flask_ckeditor.utils import cleanify
 from flask import Flask, abort, render_template, redirect, url_for, flash, request
 from flask_bootstrap import Bootstrap5
 from flask_ckeditor import CKEditor
@@ -198,7 +199,7 @@ def show_post(post_id):
             return redirect(url_for("login"))
 
         new_comment = Comment(
-            text=comment_form.comment_text.data,
+            text=cleanify(comment_form.comment_text.data),
             comment_author=current_user,
             parent_post=requested_post
         )
@@ -217,7 +218,7 @@ def add_new_post():
         new_post = BlogPost(
             title=form.title.data,
             subtitle=form.subtitle.data,
-            body=form.body.data,
+            body=cleanify(form.body.data),
             img_url=form.img_url.data,
             author=current_user,
             date=date.today().strftime("%B %d, %Y")
